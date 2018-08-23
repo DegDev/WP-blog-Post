@@ -1,11 +1,9 @@
 <?php
 /**
  *  @author Dmitri Puscas <degwelloa@gmail.com>
- *  @copyright Copyright (c) 2018 Auslogics Software Pty Ltd (http://www.auslogics.com)
- *  Related Wrike task: https://www.wrike.com/open.htm?id=213849819
  */
 
-namespace Auslogics\Database;
+namespace App\Database;
 
 use PDO;
 use PDOException;
@@ -16,14 +14,15 @@ use PDOException;
  * <code>
  * <?php
  *
- * use App\Config\Config;  
+ * use App\Config\Config;
  * use App\Database\Connection;
  *
  * $pdoConnection = Connection::make( Config::get('db') );
- * 
+ *
  * </code>
  */
-class Connection {
+class Connection
+{
 
     /**
      * Создаёт новый обьект PDO и конектится к базе данных
@@ -43,7 +42,7 @@ class Connection {
                 $config['user'], $config['password'], $options
             );
         } catch (PDOException $e) {
-            die($e->getMessage());            
+            die($e->getMessage());
         }
     }
 }
