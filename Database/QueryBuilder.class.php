@@ -1,7 +1,6 @@
 <?php
 /**
- *  @author Dmitri Puscas <degwelloa@gmail.com>
- *  @copyright Copyright (c) 2018 Auslogics Software Pty Ltd (http://www.auslogics.com) 
+ *  @author Dmitri Puscas <degwelloa@gmail.com> 
  */
 
 namespace Auslogics\Database;
@@ -22,14 +21,17 @@ use PDOException;
  * $db = new QueryBuilder(   Connection::make( Config::get('db') )    );
  * 
  * $query = $db->find('table_name',[
+ * 
  *           'id' => $id
+ * 
  *      ]);
  *
  * echo $query['id'];
  * }
  * </code>
  */
-class QueryBuilder {
+class QueryBuilder
+{
     /**
      * Экземляр PDO
      *
@@ -55,7 +57,7 @@ class QueryBuilder {
      * @throws PDOException 
      */
     public function query($sql)
-    { 
+    {
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->execute();
