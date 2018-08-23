@@ -21,7 +21,7 @@ use App\Config\Config;
  * $models = BlogPost::getLatest($pdo);
  *
  * foreach($models as $menuItem){
- *  
+ *
  *  echo $menuItem->title. "\n";
  *  echo $menuItem->teaser."\n";
  *  echo $menuItem->date.  "\n";
@@ -30,7 +30,8 @@ use App\Config\Config;
  * }
  * </code>
  */
-class BlogPost {
+class BlogPost
+{
     public $id;
 
     /**
@@ -63,7 +64,8 @@ class BlogPost {
 
     /**
      *
-     * Заглавие поста из ВордПресс базы данных
+     * Заглавие поста из ВордПресс базы данных.
+     * Имя соотвествует имени в ВордПресс.
      *
      * @var  string $post_title      Заглавие поста
      */
@@ -99,7 +101,6 @@ class BlogPost {
 
     /**
      * Описание поста, post meta description из WordPress
-     * Для /tools/articles/ используется post_content
      *
      * @var  string $post_description    описание поста
      */
@@ -111,7 +112,7 @@ class BlogPost {
      */
     public function __construct()
     {
-
+        $this->init();
     }
 
     /**
@@ -124,9 +125,9 @@ class BlogPost {
     public function init()
     {
         try {
-            $this->id     = $this->ID;
-            $this->title  = $this->post_title;
-            $this->date   = (new \DateTime($this->post_date))
+            $this->id    = $this->ID;
+            $this->title = $this->post_title;
+            $this->date  = (new \DateTime($this->post_date))
                 ->format('m/d/Y');
 
             $this->teaser = $this->contentToTeaser();
@@ -150,7 +151,7 @@ class BlogPost {
      */
     protected function contentToTeaser()
     {
-        if( $this->post_description != null ) {
+        if ($this->post_description != null) {
 
             return $this->post_description;
         }
@@ -176,8 +177,7 @@ class BlogPost {
     public static function getLatest($pdo)
     {
         $statement = $pdo->query(
-          //  "SELECT p1.*,
-           "SELECT p1.ID,p1.post_title,p1.post_date,left(p1.post_content,221) as post_content,p1.post_name,
+            "SELECT p1.ID,p1.post_title,p1.post_date,left(p1.post_content,221) as post_content,p1.post_name,
                 wm2.meta_value,wm3.meta_value as post_description
             FROM
                 aa_posts p1
@@ -209,16 +209,15 @@ class BlogPost {
             p1.post_date DESC LIMIT 3");
 
 
-        $statement->setFetchMode(PDO::FETCH_CLASS, "Auslogics\Models\BlogPost");       
+        $statement->setFetchMode(PDO::FETCH_CLASS, "App\Models\BlogPost");
         return $statement->fetchAll();
     }
 
     /**
-     * Для /modules/tools/articles
-     * Генерация случайного списка постов для https://www.giveaway-club.com/
+     *
      * Извлекает из двух таблиц: aa_post и aa_postmeta данные, результат извлечения
      * создаёт обьекты BlogPost и заносит в соотвествующие одноимённые свойства
-     * данные из полей таблиц
+     * данные из полей таблиц. Интересуют только посты начиная от 24 ноября 2017.
      *
      * @param    $pdo                    Экземпляр PDO объекта, соединенного с базой данных
      * @return   array BlogPost          Массив членами которого являются обьекты BlogPost
@@ -258,8 +257,8 @@ class BlogPost {
             ORDER BY
             {$orderStr} LIMIT {$amount}");
 
-        $statement->setFetchMode(PDO::FETCH_CLASS, "Auslogics\Models\BlogPost");
-        
+        $statement->setFetchMode(PDO::FETCH_CLASS, "App\Models\BlogPost");
+
         return $statement->fetchAll();
     }
 }
